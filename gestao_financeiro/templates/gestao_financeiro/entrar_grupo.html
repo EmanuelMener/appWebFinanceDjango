@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar em um Grupo</title>
+    <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+</head>
+<body>
+    <h1>Entrar em um Grupo</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="codigo_acesso">Código de Acesso:</label>
+        <input type="text" id="codigo_acesso" name="codigo_acesso" required>
+        <button type="submit">Entrar no Grupo</button>
+
+        {% if erro %}
+            <p style="color:red;">{{ erro }}</p>
+        {% endif %}
+    </form>
+
+    <a href="{% url 'painel' %}">Voltar ao Painel</a>
+</body>
+</html>

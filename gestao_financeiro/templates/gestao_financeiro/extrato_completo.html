@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrato Completo</title>
+    <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Extrato Completo <a href="{% url 'painel' %}" class="back-painel-button">Painel</a></h1>
+
+        <table class="extrato-table">
+            <thead>
+                <tr>
+                    <th>Data/Hora</th>
+                    <th>Descrição das Movimentações</th>
+                    <th>Valor</th>
+                    <th>Saldo</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dia, transacoes_do_dia in transacoes_por_dia.items %}
+                    <tr class="extrato-dia">
+                        <td colspan="5">{{ dia }}</td>
+                    </tr>
+                    {% for transacao in transacoes_do_dia %}
+                        <tr class="extrato-item">
+                           <td>{{ transacao.data|date:"d/m/Y" }}</td>
+                            <td>{{ transacao.descricao }}</td>
+                            <td>R$ {{ transacao.valor }}</td>
+                            <td>R$ {{ transacao.saldo }}</td>
+                            <td>{{ transacao.tipo }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Navegação entre páginas -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="see-more-button">Anterior</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="see-more-button">Próximo</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

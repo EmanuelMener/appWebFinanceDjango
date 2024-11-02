@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Grupo</title>
+    <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+</head>
+<body>
+
+<!-- Painel de Resumo do Grupo -->
+<header class="homebar">
+    <div class="user-info">
+        <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
+        <div class="user-details">
+            <span class="username">Grupo: {{ grupo.nome }}</span>
+            <span class="datetime">{{ current_datetime }}</span>
+        </div>
+    </div>
+</header>
+
+<main class="main-panel">
+
+    <section class="summary">
+        <div class="card receita">
+            <h3>Total Receitas do Grupo</h3>
+            <p>R$ {{ total_receitas_grupo }}</p>
+        </div>
+        <div class="card despesa">
+            <h3>Total Despesas do Grupo</h3>
+            <p>R$ {{ total_despesas_grupo }}</p>
+        </div>
+        <div class="card saldo">
+            <h3>Saldo do Grupo</h3>
+            <p>R$ {{ saldo_grupo }}</p>
+        </div>
+    </section>
+    <a href="{% url 'painel' %}" class="back-painel-button">Painel</a>
+    <section class="group-members">
+        <h3>Membros do Grupo</h3>
+        <ul>
+            {% for membro in grupo.membros.all %}
+                <li>{{ membro.username }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="transactions-list">
+        <h3>Transações Recentes do Grupo</h3>
+        <ul>
+            {% for transacao in transacoes_grupo %}
+                <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+            {% empty %}
+                <li>Sem transações recentes.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</main>
+
+<!-- Botão flutuante para abrir o popup -->
+<a href="javascript:void(0);" class="floating-button" onclick="openPopup()">+</a>
+
+<!-- Estrutura do Popup para Adicionar Transação -->
+<div id="popupForm" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2>Registrar Transação no Grupo</h2>
+
+        <form id="transactionForm" method="POST" action="{% url 'adicionar_transacao' %}">
+            {% csrf_token %}
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+
+            <label for="valor">Valor:</label>
+            <input type="number" step="0.01" id="valor" name="valor" required>
+
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" name="categoria">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+
+            <label for="historico">Histórico:</label>
+            <input type="text" id="historico" name="historico" required>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts para abrir e fechar o popup -->
+<script>
+    function openPopup() {
+        document.getElementById("popupForm").style.display = "flex";
+    }
+
+    function closePopup() {
+        document.getElementById("popupForm").style.display = "none";
+    }
+</script>
+
+</body>
+</html>

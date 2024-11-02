@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gestão Financeira</title>
+    <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+</head>
+<body>
+    <!-- Homebar com nome do usuário e data -->
+    <header class="homebar">
+        <div class="user-info">
+            <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
+            <div class="user-details">
+                <span class="username">Olá, {{ user.username }}!</span>
+                <span class="datetime">{{ current_datetime }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Painel Principal com resumo financeiro -->
+    <main class="main-panel">
+        <section class="summary">
+            <div class="card receita">
+                <h3>Receitas</h3>
+                <p>R$ {{ total_receitas }}</p>
+            </div>
+            <div class="card despesa">
+                <h3>Despesas</h3>
+                <p>R$ {{ total_despesas }}</p>
+            </div>
+            <div class="card provisao-receita">
+                <h3>Provisão de Receitas</h3>
+                <p>R$ {{ total_provisao_receitas }}</p>
+            </div>
+            <div class="card provisao-despesa">
+                <h3>Provisão de Despesas</h3>
+                <p>R$ {{ total_provisao_despesas }}</p>
+            </div>
+        </section>
+
+        <!-- Gerenciamento de Grupo -->
+        <section class="group-management">
+            <h3>Gerenciamento de Grupo</h3>
+            {% if user.grupos.exists %}
+                <a href="{% url 'painel_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Painel do Grupo</a>
+            {% else %}
+                <a href="{% url 'criar_grupo' %}" class="button">Criar Grupo</a>
+                <a href="{% url 'entrar_grupo' %}" class="button">Entrar em um Grupo com Código de Acesso</a>
+            {% endif %}
+        </section>
+
+        <!-- Listagem das Próximas Transações -->
+        <section class="upcoming-transactions">
+            <h3>Próximas Transações</h3>
+            <div class="transactions-list">
+                <div class="next-transacoes">
+                    <ul>
+                        {% for transacao in proximas_receitas %}
+                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+                        {% endfor %}
+                        {% for transacao in proximas_despesas %}
+                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <a href="{% url 'extrato_completo' %}" class="see-more-button">Ver mais</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão flutuante para adicionar novas transações -->
+    <a href="javascript:void(0);" onclick="openPopup()" class="floating-button">+</a>
+
+    <!-- Estrutura do Popup para Adicionar Transação -->
+    <div id="popupForm" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Registrar Transação</h2>
+
+            <form id="transactionForm" method="POST" action="{% url 'adicionar_transacao' %}">
+                {% csrf_token %}
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="data" required>
+
+                <label for="valor">Valor:</label>
+                <input type="number" step="0.01" id="valor" name="valor" required>
+
+                <label for="categoria">Categoria:</label>
+                <select id="categoria" name="categoria">
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                    <option value="provisao_receita">Provisão Receita</option>
+                    <option value="provisao_despesa">Provisão Despesa</option>
+                </select>
+
+                <label for="historico">Histórico:</label>
+                <input type="text" id="historico" name="historico" required>
+
+                <button type="submit">Registrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        function openPopup() {
+            document.getElementById("popupForm").style.display = "flex";
+        }
+
+        function closePopup() {
+            document.getElementById("popupForm").style.display = "none";
+        }
+    </script>
+</body>
+</html>
