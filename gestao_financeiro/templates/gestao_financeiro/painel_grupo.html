@@ -25,18 +25,19 @@
     <section class="summary">
         <div class="card receita">
             <h3>Total Receitas do Grupo</h3>
-            <p>R$ {{ total_receitas_grupo }}</p>
+            <p>R$ {{ total_receitas_grupo|floatformat:2 }}</p>
         </div>
         <div class="card despesa">
             <h3>Total Despesas do Grupo</h3>
-            <p>R$ {{ total_despesas_grupo }}</p>
+            <p>R$ {{ total_despesas_grupo|floatformat:2 }}</p>
         </div>
         <div class="card saldo">
             <h3>Saldo do Grupo</h3>
-            <p>R$ {{ saldo_grupo }}</p>
+            <p>R$ {{ saldo_grupo|floatformat:2 }}</p>
         </div>
     </section>
     <a href="{% url 'painel' %}" class="back-painel-button">Painel</a>
+
     <section class="group-members">
         <h3>Membros do Grupo</h3>
         <ul>
@@ -50,7 +51,7 @@
         <h3>Transações Recentes do Grupo</h3>
         <ul>
             {% for transacao in transacoes_grupo %}
-                <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+                <li>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</li>
             {% empty %}
                 <li>Sem transações recentes.</li>
             {% endfor %}

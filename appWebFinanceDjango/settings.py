@@ -16,7 +16,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATICFILES_DIRS = [
-    BASE_DIR / "gestao_financeiro/templates/../gestao_financeiro/static"
+    BASE_DIR / "gestao_financeiro/static"
 ]
 
 
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
@@ -133,4 +133,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'painel'  # Nome da URL que o login redireciona
 LOGIN_URL = 'login'  # URL de login
 LOGOUT_REDIRECT_URL = 'login'  # Nome da URL para redirecionar após logout
+# settings.py
+USE_L10N = True
+
+
 

@@ -1,0 +1,17 @@
+<!-- gestao_financeiro/templates/gestao_financeiro/importar_ofx.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Importar OFX</title>
+</head>
+<body>
+    <h1>Importar Extrato OFX</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="ofx_file">Selecione o arquivo OFX:</label>
+        <input type="file" id="ofx_file" name="ofx_file" required>
+        <button type="submit">Importar</button>
+    </form>
+</body>
+</html>

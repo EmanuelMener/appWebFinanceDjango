@@ -16,4 +16,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='gestao_financeiro/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
 
+    path("importar_ofx/", views.importar_ofx, name="importar_ofx"),
+
+    path('grupo/<int:grupo_id>/', views.detalhes_grupo, name='detalhes_grupo'),
 ]

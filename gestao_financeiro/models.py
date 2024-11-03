@@ -1,15 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
+
 
 
 class Grupo(models.Model):
     nome = models.CharField(max_length=100)
-    descricao = models.TextField(blank=True, null=True)
-    membros = models.ManyToManyField(User, related_name="grupos")
+    criador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='grupos_criados')
+    membros = models.ManyToManyField(User, related_name='grupos')
+    chave_convite = models.UUIDField(default=uuid.uuid4, unique=True)  # Gera uma chave única
 
     def __str__(self):
         return self.nome
-
 
 class Transacao(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,8 +28,11 @@ class Transacao(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     data = models.DateField()
 
+
     # Novo campo para armazenar o saldo acumulado
     saldo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    importado_ofx = models.BooleanField(default=False)  # Novo campo para indicar importação OFX
 
     def save(self, *args, **kwargs):
         # Pega a última transação para calcular o saldo

@@ -24,19 +24,19 @@
         <section class="summary">
             <div class="card receita">
                 <h3>Receitas</h3>
-                <p>R$ {{ total_receitas }}</p>
+                <p>R$ {{ total_receitas|floatformat:2 }}</p>
             </div>
             <div class="card despesa">
                 <h3>Despesas</h3>
-                <p>R$ {{ total_despesas }}</p>
+                <p>R$ {{ total_despesas|floatformat:2 }}</p>
             </div>
             <div class="card provisao-receita">
                 <h3>Provisão de Receitas</h3>
-                <p>R$ {{ total_provisao_receitas }}</p>
+                <p>R$ {{ total_provisao_receitas|floatformat:2 }}</p>
             </div>
             <div class="card provisao-despesa">
                 <h3>Provisão de Despesas</h3>
-                <p>R$ {{ total_provisao_despesas }}</p>
+                <p>R$ {{ total_provisao_despesas|floatformat:2 }}</p>
             </div>
         </section>
 
@@ -44,11 +44,21 @@
         <section class="group-management">
             <h3>Gerenciamento de Grupo</h3>
             {% if user.grupos.exists %}
+                <!-- Exibe o botão para o Painel do Grupo -->
                 <a href="{% url 'painel_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Painel do Grupo</a>
-            {% else %}
-                <a href="{% url 'criar_grupo' %}" class="button">Criar Grupo</a>
-                <a href="{% url 'entrar_grupo' %}" class="button">Entrar em um Grupo com Código de Acesso</a>
+
+                <!-- Exibe o botão para os Detalhes do Grupo -->
+                <a href="{% url 'detalhes_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Detalhes</a>
             {% endif %}
+
+            <!-- Verifica se o usuário já faz parte de algum grupo para exibir o link do painel do grupo -->
+            {% if user.grupos.exists %}
+                <a href="{% url 'painel_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Painel do Grupo</a>
+            {% endif %}
+
+            <!-- Exibe as opções de criação e entrada de grupo sempre -->
+            <a href="{% url 'criar_grupo' %}" class="back-painel-button">Criar Grupo</a>
+            <a href="{% url 'entrar_grupo' %}" class="back-painel-button">Entrar em um Grupo</a>
         </section>
 
         <!-- Listagem das Próximas Transações -->
@@ -58,10 +68,10 @@
                 <div class="next-transacoes">
                     <ul>
                         {% for transacao in proximas_receitas %}
-                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</li>
                         {% endfor %}
                         {% for transacao in proximas_despesas %}
-                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor }} - {{ transacao.data }}</li>
+                            <li>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</li>
                         {% endfor %}
                     </ul>
                 </div>

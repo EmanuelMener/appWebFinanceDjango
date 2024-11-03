@@ -3,9 +3,14 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from decimal import Decimal
 from .models import Transacao, Grupo
 import random
+from django.core.files.storage import default_storage
+from ofxparse import OfxParser
+import decimal
+from decimal import Decimal  # já importado corretamente
+
+
 
 # Paleta de cores para a foto do usuário com iniciais
 PALETA_CORES = ["#E8DAEF", "#D6EAF8", "#D5F5E3", "#FCF3CF", "#FADBD8"]
@@ -18,8 +23,7 @@ def painel(request):
     # Calculando os totais de receitas e despesas apenas para o usuário logado
     total_receitas = Transacao.objects.filter(user=usuario, tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas = Transacao.objects.filter(user=usuario, tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-    total_provisao_receitas = Transacao.objects.filter(user=usuario, tipo='provisao_receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-    total_provisao_despesas = Transacao.objects.filter(user=usuario, tipo='provisao_despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+    saldo_total = total_receitas - total_despesas
 
     # Pegando as próximas 5 receitas e despesas para o usuário logado
     proximas_receitas = Transacao.objects.filter(user=usuario, tipo='receita').order_by('data')[:5]
@@ -34,8 +38,7 @@ def painel(request):
         'current_datetime': timezone.now(),
         'total_receitas': total_receitas,
         'total_despesas': total_despesas,
-        'total_provisao_receitas': total_provisao_receitas,
-        'total_provisao_despesas': total_provisao_despesas,
+        'saldo_total': saldo_total,
         'proximas_receitas': proximas_receitas,
         'proximas_despesas': proximas_despesas,
         'iniciais': iniciais,
@@ -43,6 +46,32 @@ def painel(request):
     }
 
     return render(request, 'gestao_financeiro/painel.html', contexto)
+
+# View para exibir o painel do grupo
+@login_required
+def painel_grupo(request, grupo_id):
+    grupo = get_object_or_404(Grupo, id=grupo_id)
+
+    # Verifica se o usuário é membro do grupo
+    if request.user not in grupo.membros.all():
+        return redirect('painel')  # Redireciona para o painel pessoal se não for membro
+
+    # Calcula as somas das transações para todos os membros do grupo
+    total_receitas_grupo = grupo.transacoes.filter(tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+    total_despesas_grupo = grupo.transacoes.filter(tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+    saldo_grupo = total_receitas_grupo - total_despesas_grupo
+
+    # Transações recentes do grupo
+    transacoes_grupo = grupo.transacoes.order_by('-data')[:5]
+
+    contexto = {
+        'grupo': grupo,
+        'total_receitas_grupo': total_receitas_grupo,
+        'total_despesas_grupo': total_despesas_grupo,
+        'saldo_grupo': saldo_grupo,
+        'transacoes_grupo': transacoes_grupo,
+    }
+    return render(request, 'gestao_financeiro/painel_grupo.html', contexto)
 
 # View para adicionar uma nova transação associada ao usuário logado
 @login_required
@@ -82,35 +111,14 @@ def criar_grupo(request):
         nome = request.POST.get('nome')
         grupo = Grupo.objects.create(nome=nome, criador=request.user)
         grupo.membros.add(request.user)  # O criador se torna o primeiro membro do grupo
-        return redirect('painel_grupo', grupo_id=grupo.id)
-
+        return redirect('detalhes_grupo', grupo_id=grupo.id)  # Redireciona para ver o grupo
     return render(request, 'gestao_financeiro/criar_grupo.html')
 
-# View para exibir o painel do grupo
-@login_required
-def painel_grupo(request, grupo_id):
+def detalhes_grupo(request, grupo_id):
     grupo = get_object_or_404(Grupo, id=grupo_id)
+    contexto = {'grupo': grupo}
+    return render(request, 'gestao_financeiro/detalhes_grupo.html', contexto)
 
-    # Verifica se o usuário é membro do grupo
-    if request.user not in grupo.membros.all():
-        return redirect('painel')  # Redireciona para o painel pessoal se não for membro
-
-    # Calcula as somas das transações para todos os membros do grupo
-    total_receitas_grupo = grupo.transacoes.filter(tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-    total_despesas_grupo = grupo.transacoes.filter(tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-    saldo_grupo = total_receitas_grupo - total_despesas_grupo
-
-    # Transações recentes do grupo
-    transacoes_grupo = grupo.transacoes.order_by('-data')[:5]
-
-    contexto = {
-        'grupo': grupo,
-        'total_receitas_grupo': total_receitas_grupo,
-        'total_despesas_grupo': total_despesas_grupo,
-        'saldo_grupo': saldo_grupo,
-        'transacoes_grupo': transacoes_grupo,
-    }
-    return render(request, 'gestao_financeiro/painel_grupo.html', contexto)
 
 # View para entrar em um grupo com código de acesso
 @login_required
@@ -118,7 +126,7 @@ def entrar_grupo(request):
     if request.method == 'POST':
         codigo_acesso = request.POST.get('codigo_acesso')
         try:
-            grupo = Grupo.objects.get(codigo_acesso=codigo_acesso)
+            grupo = Grupo.objects.get(chave_convite=codigo_acesso)
             grupo.membros.add(request.user)  # Adiciona o usuário como membro do grupo
             return redirect('painel_grupo', grupo_id=grupo.id)
         except Grupo.DoesNotExist:
@@ -167,3 +175,43 @@ def extrato_completo(request):
         'page_obj': page_obj
     }
     return render(request, 'gestao_financeiro/extrato_completo.html', context)
+
+
+@login_required
+def importar_ofx(request):
+    if request.method == 'POST' and request.FILES.get('ofx_file'):
+        ofx_file = request.FILES['ofx_file']
+        ofx = OfxParser.parse(ofx_file)
+
+        # Identifica o grupo ao qual o usuário pertence, se houver
+        grupo = request.user.grupos.first()  # Supondo que o usuário pertence a um único grupo
+
+        for account in ofx.accounts:
+            for transaction in account.statement.transactions:
+                # Verifica se a transação já existe para evitar duplicação
+                if not Transacao.objects.filter(
+                    user=request.user,
+                    descricao=transaction.memo,
+                    valor=Decimal(transaction.amount),
+                    data=transaction.date,
+                    grupo=grupo
+                ).exists():
+                    # Cria uma nova transação, associada ao grupo se houver
+                    transacao = Transacao(
+                        user=request.user,
+                        grupo=grupo,  # Associa ao grupo diretamente
+                        descricao=transaction.memo,
+                        valor=Decimal(transaction.amount),
+                        data=transaction.date,
+                        tipo='receita' if transaction.amount >= 0 else 'despesa',
+                    )
+                    transacao.save()
+
+        # Redireciona para o painel do grupo, se o usuário estiver em um
+        if grupo:
+            return redirect('painel_grupo', grupo_id=grupo.id)
+        else:
+            return redirect('painel')
+
+    return render(request, 'gestao_financeiro/importar_ofx.html')
+
