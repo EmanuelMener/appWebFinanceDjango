@@ -10,12 +10,186 @@ body {
 .homebar {
     background-color: #8a05be; /* Fundo roxo Nubank */
     color: white;
-    padding: 5px 15px;
+    padding: 10px 15px;
     display: flex;
     align-items: center;
+    justify-content: center;
     max-height: 20px; /* Limita a altura da homebar */
     overflow: hidden;
+
+    background-image: url("/static/gestao_financeiro/img/logo.svg");
+    background-size: auto; /* Ajusta o tamanho da imagem */
+    background-position: -100px; /* Alinha a imagem mais para a direita */
+
 }
+
+/* Estilos para o fundo do modal */
+.modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo transparente escuro */
+}
+
+/* Contêiner do conteúdo do modal */
+.modal-content {
+    background-color: #2c2c2c;
+    margin: 15% auto;
+    border: 2px solid #a0c4ff;
+    border-radius: 8px;
+    width: 400px;
+    height: auto;
+    padding: 20px 10px;
+    max-width: 80%;
+    max-width: 70%;
+    color: #FFFFFF;
+    text-align: center;
+    position: relative;
+}
+
+/* Botão de fechar (X) no canto superior direito */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+/* Estilo para o dropdown e o botão "Acessar" */
+.group-dropdown {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #3A3A3A;
+    color: #FFFFFF;
+    border: 2px solid #a0c4ff;
+    border-radius: 5px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn-selecionar {
+    background-color: #6a0dad;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-selecionar:hover {
+    background-color: #8e44ad;
+}
+
+
+/* Estilo da seção de seleção de grupos */
+.group-selection {
+    margin: 20px 0;
+    padding-left: 45px;
+    color: #FFFFFF;
+}
+
+
+
+.group-selection h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #a0c4ff; /* Azul claro */
+}
+
+.group-selection select {
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #4b006e;
+    border-radius: 5px;
+    background-color: #3a3a4a;
+    color: #e1e1f1;
+}
+
+/* Contêiner do dropdown */
+.dropdown-container {
+    display: inline-block;
+    position: relative;
+}
+
+/* Estilo para o dropdown */
+.group-dropdown {
+    appearance: none;
+    background-color: #3A3A3A; /* Cinza escuro */
+    color: #FFFFFF;
+    border: 2px solid #a0c4ff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Ícone de seta para o dropdown (estiliza o pseudo-elemento) */
+.group-dropdown::after {
+    content: "▼";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0c4ff;
+    pointer-events: none;
+}
+
+/* Estilos adicionais para hover e foco */
+.group-dropdown:hover, .group-dropdown:focus {
+    border-color: #8e9eff; /* Azul mais claro ao passar o mouse */
+    background-color: #505050;
+}
+/* Painel de detalhes do grupo */
+.group-panel {
+    background-color: #3A3A3A; /* Fundo cinza escuro */
+    border: 1px solid #8e9eff; /* Borda azul claro */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.group-panel h2 {
+    font-size: 1.5em;
+    color: #a0c4ff; /* Azul claro */
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.group-panel p {
+    font-size: 1em;
+    color: #FFFFFF;
+    line-height: 1.6;
+}
+
+
+.logo-container {
+    display: inline-block;
+    margin-left: -60%;
+    padding-right: 20px;
+}
+
+.logo {
+    height: auto; /* Ajuste o tamanho conforme necessário */
+    width: 200px;
+}
+
 
 /* Container flexível para alinhar itens da homebar horizontalmente */
 .user-info {
@@ -67,36 +241,77 @@ body {
 .summary {
     display: flex;
     gap: 15px;
-    justify-content: space-around; /* Alinhamento uniforme */
+    justify-content: center; /* Alinhamento uniforme */
     margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.carousel-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
 }
 
 /* Estilo dos cartões de resumo */
 .card {
+    display: flex;
     flex: 1;
     padding: 20px;
     background-color: #2c2c3a; /* Fundo do cartão escuro */
     border-radius: 12px;
     text-align: center;
+    align-items: center;
     color: #e1e1f1;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden; /* Oculta a parte do ícone que ultrapassa o limite do card */
+
+    min-width: 200px;
+    gap: 15px; /* Espaço entre o ícone e o conteúdo */
 }
 
-.card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #cba6f7;
+
+/* Estilos para as linhas verticais coloridas */
+.card.saldo { border-right: 5px solid #007bff; } /* Saldo - Azul */
+.card.receita { border-right: 5px solid #28a745; } /* Receitas - Verde */
+.card.despesa { border-right: 5px solid #dc3545; } /* Despesas - Vermelho */
+.card.provisao-receita { border-right: 5px solid #ffc107; } /* Provisão de Receitas - Amarelo */
+.card.provisao-despesa { border-right: 5px solid #ff5722; } /* Provisão de Despesas - Laranja */
+
+/* Estilo do ícone do card */
+.card-icon {
+    flex-shrink: 0;
+    font-size: 3rem; /* Tamanho maior do ícone */
+    color: rgba(255, 255, 255, 0.2); /* Branco semi-transparente */
+
+    margin-left: -10%;
 }
 
-.card p {
-    font-size: 22px;
+/* Alinhamento e espaçamento do conteúdo do card */
+.card-content {
+    text-align: left;
+    left: -100px;
+    z-index: 1; /* Garante que o texto fique acima do ícone */
+}
+
+.card-content h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.card-content p {
+    margin: 0;
+    font-size: 1rem;
     font-weight: bold;
-    color: #8a05be; /* Valor destacado */
 }
+
+
 
 /* Estilo das transações recentes */
 .upcoming-transactions {
     margin-top: 30px;
+    padding: 20px;
 }
 
 .upcoming-transactions h3 {
@@ -105,6 +320,67 @@ body {
     margin-bottom: 15px;
     text-align: center;
 }
+
+/* Estilos básicos dos lançamentos */
+.transaction-item {
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.transaction-item:hover {
+    background-color: #4b006a;
+}
+
+/* Ocultar ações inicialmente */
+.transaction-actions {
+    opacity: 0;
+    display: flex;
+    gap: 5px;
+    transition: opacity 0.3s ease;
+}
+
+/* Exibir ações no hover */
+.transaction-item:hover .transaction-actions {
+    opacity: 1;
+}
+
+/* Botões de ação */
+.transaction-actions a {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.transaction-actions {
+    display: none;
+    margin-left: 10px;
+}
+
+li:hover .transaction-actions {
+    display: inline-block;
+}
+
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #F44336;
+    color: white;
+}
+
 
 .transactions-list ul {
     list-style-type: none;
@@ -124,22 +400,21 @@ body {
 .floating-button {
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    background-color: #8a05be;
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    right: 10px;
+    z-index: 10; /* Garante que o texto fique acima do ícone */
 }
 
 .floating-button:hover {
+    background-color: #4b006e;
+}
+
+/* Botão flutuante para adicionar transações */
+.floating-button2 {
+    position: fixed;
+    bottom: 120px;
+    right: 10px;
+}
+.floating-button2 i:hover {
     background-color: #4b006e;
 }
 
@@ -317,3 +592,207 @@ body {
 .back-painel-button:hover {
     background-color: #4b006e;
 }
+
+.summary-carousel {
+    flex-wrap: wrap;
+    gap: 100px;
+
+    padding: 10px 20px;
+}
+
+.group-management {
+    margin: 20px 0;
+    padding-left: 50px;
+}
+
+.carousel-buttons {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 0;
+    scroll-snap-type: x mandatory;
+
+}
+
+
+.icon-button i {
+    font-size: 24px; /* Tamanho do ícone */
+    background-color: #8a05be; /* Cor do círculo */
+    color: white;
+    border-radius: 50%;
+    width: 50px; /* Largura do botão circular */
+    height: 50px; /* Altura do botão circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px; /* Espaço entre o ícone e o texto */
+}
+
+.icon-button {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    scroll-snap-align: center;
+}
+
+.icon-button span {
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    max-width: 70px;
+}
+
+/* Contêiner dos cards */
+.carousel-container {
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Permite quebra de linha quando necessário */
+    padding: 10px;
+}
+
+/* Estilos para telas grandes */
+@media (min-width: 768px) {
+    .carousel-container {
+        flex-direction: row; /* Cards lado a lado */
+    }
+    .card {
+        width: 23%; /* Cada card ocupa cerca de 1/4 do espaço em telas grandes */
+        max-width: 250px; /* Limite máximo opcional para manter um bom layout */
+    }
+}
+
+/* Estilos específicos para mobile */
+@media (max-width: 767px) {
+    .carousel-container {
+        flex-direction: column; /* Empilha os cards */
+        align-items: center; /* Centraliza os cards */
+        padding: 0; /* Adiciona um pouco de espaço nas laterais */
+    }
+    .card {
+        width: 100%; /* Largura completa para os cards no mobile */
+        max-width: 1000px; /* Limite opcional para centralizar ainda melhor */
+        /*margin-bottom: 15px;  Espaço entre os cards */
+        /* Aumenta o padding para tornar o card mais espaçoso */
+        box-sizing: border-box; /* Garante que o padding não ultrapasse o width */
+    }
+}
+
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 767px) {
+    .homebar {
+        flex-direction: column; /* Empilha itens verticalmente no mobile */
+        text-align: center;
+        padding: 15px;
+        max-height: 100px;
+        background-image: none;
+    }
+    .logo-container{
+        margin-left: 0;
+    }
+    .logo {
+        height: 30px; /* Reduz o tamanho do logotipo em telas menores */
+        padding-left: 20px;
+    }
+    .user-info {
+        gap: 5px; /* Menor espaçamento entre os itens */
+        margin-left: 15px;
+    }
+
+    .user-photo{
+        color: #1e1e2f;
+    }
+    .username, .datetime {
+        font-size: 12px; /* Reduz o tamanho da fonte no mobile */
+    }
+}
+
+/* Media query para dispositivos móveis */
+@media (max-width: 767px) {
+
+    /* Centralizar o botão "Importar Extrato" */
+    .see-more-button {
+        display: block;
+        margin: 0 auto; /* Centraliza o botão horizontalmente */
+        padding: 10px 20px;
+        max-width: 200px; /* Define largura máxima para centralização */
+        text-align: center;
+    }
+
+    /* Seção de pro dia a dia*/
+    .group-management {
+        text-align: center; /* Centraliza o texto e os botões */
+        margin: 20px 0;
+        padding-left: 20px;
+    }
+
+    .back-painel-button {
+        display: inline-block;
+        margin: 5px auto; /* Espaçamento vertical e centralização */
+        padding: 10px 15px;
+        text-align: center;
+        max-width: 150px; /* Limite de largura para centralização */
+    }
+
+    /* Centralizar Próximas Transações */
+    .upcoming-transactions {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    /* Botão flutuante no mobile */
+    .floating-button {
+        bottom: 15px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 767px) {
+    .carousel-buttons {
+        display: flex;
+        overflow-x: auto;
+        margin-left: 20px;
+        gap: 15px;
+        padding: 10px 0;
+        padding-left: 100px;
+        scroll-snap-type: x mandatory;
+        justify-content: center;
+    }
+
+
+
+    .icon-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: white;
+        scroll-snap-align: center;
+    }
+
+    .icon-button i {
+        font-size: 24px; /* Tamanho do ícone */
+        background-color: #8a05be; /* Cor do círculo */
+        color: white;
+        border-radius: 50%;
+        width: 50px; /* Largura do botão circular */
+        height: 50px; /* Altura do botão circular */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 5px; /* Espaço entre o ícone e o texto */
+    }
+
+    .icon-button span {
+        font-size: 12px;
+        color: white;
+        text-align: center;
+        max-width: 70px;
+    }
+}
+
+

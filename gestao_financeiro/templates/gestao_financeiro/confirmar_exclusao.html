@@ -1,0 +1,7 @@
+<h2>Confirmar Exclusão</h2>
+<p>Você tem certeza de que deseja excluir a transação: "{{ transacao.descricao }}"?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Sim, excluir</button>
+    <a href="{% url 'painel' %}">Cancelar</a>
+</form>

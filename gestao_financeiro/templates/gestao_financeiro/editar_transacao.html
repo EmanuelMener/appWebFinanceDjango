@@ -1,0 +1,15 @@
+<h2>Editar Transação</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="descricao">Descrição:</label>
+    <input type="text" id="descricao" name="descricao" value="{{ transacao.descricao }}" required>
+
+    <label for="valor">Valor:</label>
+    <input type="number" id="valor" name="valor" step="0.01" value="{{ transacao.valor }}" required>
+
+    <label for="data">Data:</label>
+    <input type="date" id="data" name="data" value="{{ transacao.data }}" required>
+
+    <button type="submit">Salvar</button>
+    <a href="{% url 'painel' %}">Cancelar</a>
+</form>

@@ -9,7 +9,11 @@ from django.core.files.storage import default_storage
 from ofxparse import OfxParser
 import decimal
 from decimal import Decimal  # já importado corretamente
+<<<<<<< HEAD
 
+=======
+from django.http import JsonResponse
+>>>>>>> 3e37dc2 (REQUERIMENT)
 
 
 # Paleta de cores para a foto do usuário com iniciais
@@ -20,7 +24,14 @@ PALETA_CORES = ["#E8DAEF", "#D6EAF8", "#D5F5E3", "#FCF3CF", "#FADBD8"]
 def painel(request):
     usuario = request.user
 
-    # Calculando os totais de receitas e despesas apenas para o usuário logado
+    # Pegue todos os grupos que o usuário faz parte
+    grupos = Grupo.objects.filter(membros=usuario)   # Supondo que `grupos` é o relacionamento para os grupos que o usuário pertence
+
+    # Exibe as iniciais do usuário e uma cor de fundo aleatória
+    iniciais = "".join([parte[0] for parte in usuario.username.split()][:2]).upper()
+    cor_aleatoria = random.choice(PALETA_CORES)
+
+    # Calculando os totais de receitas e despesas
     total_receitas = Transacao.objects.filter(user=usuario, tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas = Transacao.objects.filter(user=usuario, tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     saldo_total = total_receitas - total_despesas
@@ -29,28 +40,35 @@ def painel(request):
     proximas_receitas = Transacao.objects.filter(user=usuario, tipo='receita').order_by('data')[:5]
     proximas_despesas = Transacao.objects.filter(user=usuario, tipo='despesa').order_by('data')[:5]
 
-    # Exibir as iniciais do usuário e uma cor de fundo aleatória
-    iniciais = "".join([parte[0] for parte in usuario.username.split()][:2]).upper()
-    cor_aleatoria = random.choice(PALETA_CORES)
-
     contexto = {
         'user': usuario,
-        'current_datetime': timezone.now(),
         'total_receitas': total_receitas,
         'total_despesas': total_despesas,
         'saldo_total': saldo_total,
         'proximas_receitas': proximas_receitas,
         'proximas_despesas': proximas_despesas,
+        'current_datetime': timezone.now(),
+        'grupos': grupos,
+
         'iniciais': iniciais,
         'cor_aleatoria': cor_aleatoria,
     }
 
     return render(request, 'gestao_financeiro/painel.html', contexto)
 
+<<<<<<< HEAD
 # View para exibir o painel do grupo
 @login_required
 def painel_grupo(request, grupo_id):
     grupo = get_object_or_404(Grupo, id=grupo_id)
+=======
+
+# View para exibir o painel do grupo
+@login_required
+def painel_grupo(request, grupo_id):
+
+    grupo = get_object_or_404(Grupo, id=grupo_id, membros=request.user)
+>>>>>>> 3e37dc2 (REQUERIMENT)
 
     # Verifica se o usuário é membro do grupo
     if request.user not in grupo.membros.all():
@@ -59,7 +77,11 @@ def painel_grupo(request, grupo_id):
     # Calcula as somas das transações para todos os membros do grupo
     total_receitas_grupo = grupo.transacoes.filter(tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas_grupo = grupo.transacoes.filter(tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+<<<<<<< HEAD
     saldo_grupo = total_receitas_grupo - total_despesas_grupo
+=======
+    saldo_grupo = total_receitas_grupo -- total_despesas_grupo
+>>>>>>> 3e37dc2 (REQUERIMENT)
 
     # Transações recentes do grupo
     transacoes_grupo = grupo.transacoes.order_by('-data')[:5]
@@ -104,6 +126,26 @@ def adicionar_transacao(request):
 
     return render(request, 'gestao_financeiro/painel.html')
 
+
+@login_required
+def editar_transacao(request, transacao_id):
+    transacao = get_object_or_404(Transacao, id=transacao_id, user=request.user)
+    if request.method == 'POST':
+        transacao.descricao = request.POST.get('descricao')
+        transacao.valor = Decimal(request.POST.get('valor'))
+        transacao.data = request.POST.get('data')
+        transacao.save()
+        return redirect('painel')  # Redireciona para o painel após a edição
+    return render(request, 'gestao_financeiro/editar_transacao.html', {'transacao': transacao})
+
+@login_required
+def apagar_transacao(request, transacao_id):
+    transacao = get_object_or_404(Transacao, id=transacao_id, user=request.user)
+    if request.method == 'POST':
+        transacao.delete()
+        return redirect('painel')  # Redireciona para o painel após exclusão
+    return render(request, 'gestao_financeiro/confirmar_exclusao.html', {'transacao': transacao})
+
 # View para criar um novo grupo
 @login_required
 def criar_grupo(request):
@@ -135,40 +177,22 @@ def entrar_grupo(request):
     return render(request, 'gestao_financeiro/entrar_grupo.html')
 
 # View para exibir o extrato completo com paginação e agrupamento por data
+
 @login_required
 def extrato_completo(request):
     user = request.user
-    transacoes = Transacao.objects.filter(user=user).order_by('data', 'id')
+    transacoes = Transacao.objects.filter(user=user).order_by('-data', '-id')
 
-    # Paginação - definindo 10 transações por página
-    paginator = Paginator(transacoes, 10)  # Altere o número para ajustar o limite de lançamentos
+    paginator = Paginator(transacoes, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     transacoes_por_dia = {}
-    saldo_acumulado = Decimal('0.00')
-
     for transacao in page_obj:
-        # Atualiza o saldo acumulado com base no tipo da transação
-        if transacao.tipo.lower() == 'receita':
-            saldo_acumulado += transacao.valor
-        elif transacao.tipo.lower() == 'despesa':
-            saldo_acumulado -= transacao.valor
-
-        # Atribui o saldo acumulado para exibição
-        transacao.saldo = saldo_acumulado
-
-        # Agrupa transações por dia
-        dia = transacao.data if transacao.data else None
+        dia = transacao.data
         if dia not in transacoes_por_dia:
             transacoes_por_dia[dia] = []
         transacoes_por_dia[dia].append(transacao)
-
-    # Remove entradas com chave None
-    transacoes_por_dia = {k: v for k, v in transacoes_por_dia.items() if k is not None}
-
-    # Ordena o dicionário de transações_por_dia em ordem decrescente
-    transacoes_por_dia = dict(sorted(transacoes_por_dia.items(), reverse=True))
 
     context = {
         'transacoes_por_dia': transacoes_por_dia,

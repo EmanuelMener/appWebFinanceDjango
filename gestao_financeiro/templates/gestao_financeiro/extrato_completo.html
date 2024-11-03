@@ -14,7 +14,6 @@
         <table class="extrato-table">
             <thead>
                 <tr>
-                    <th>Data/Hora</th>
                     <th>Descrição das Movimentações</th>
                     <th>Valor</th>
                     <th>Saldo</th>
@@ -28,7 +27,6 @@
                     </tr>
                     {% for transacao in transacoes_do_dia %}
                         <tr class="extrato-item">
-                           <td>{{ transacao.data|date:"d/m/Y" }}</td>
                             <td>{{ transacao.descricao }}</td>
                             <td>R$ {{ transacao.valor }}</td>
                             <td>R$ {{ transacao.saldo }}</td>

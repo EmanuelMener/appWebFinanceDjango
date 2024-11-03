@@ -19,4 +19,13 @@ urlpatterns = [
     path("importar_ofx/", views.importar_ofx, name="importar_ofx"),
 
     path('grupo/<int:grupo_id>/', views.detalhes_grupo, name='detalhes_grupo'),
+<<<<<<< HEAD
+=======
+
+    path('transacao/editar/<int:transacao_id>/', views.editar_transacao, name='editar_transacao'),
+    path('transacao/apagar/<int:transacao_id>/', views.apagar_transacao, name='apagar_transacao'),
+
+
+
+>>>>>>> 3e37dc2 (REQUERIMENT)
 ]

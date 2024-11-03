@@ -6,23 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão Financeira</title>
     <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Homebar com nome do usuário e data -->
-    <header class="homebar">
-        <div class="user-info">
-            <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
-            <div class="user-details">
-                <span class="username">Olá, {{ user.username }}!</span>
-                <span class="datetime">{{ current_datetime }}</span>
+        <header class="homebar">
+            <div class="logo-container">
+                <img src="{% static 'gestao_financeiro/img/contajunto.svg' %}" alt="Logotipo" class="logo">
             </div>
-        </div>
-    </header>
 
-    <!-- Painel Principal com resumo financeiro -->
-    <main class="main-panel">
-        <section class="summary">
+            <div class="user-info">
+                <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
+                <div class="user-details">
+                    <span class="username">Olá, {{ user.username }}!</span>
+                </div>
+            </div>
+
+        </header>
+
+<!-- Painel Principal com resumo financeiro -->
+<main class="main-panel">
+    <section class="summary-carousel">
+        <div class="carousel-container">
+            <div class="card saldo">
+                <div class="card-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Saldo</h3>
+                    <p>R$ {{ saldo_total|floatformat:2 }}</p>
+                </div>
+            </div>
             <div class="card receita">
+<<<<<<< HEAD
                 <h3>Receitas</h3>
                 <p>R$ {{ total_receitas|floatformat:2 }}</p>
             </div>
@@ -37,11 +53,79 @@
             <div class="card provisao-despesa">
                 <h3>Provisão de Despesas</h3>
                 <p>R$ {{ total_provisao_despesas|floatformat:2 }}</p>
+=======
+                <div class="card-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Receitas</h3>
+                    <p>R$ {{ total_receitas|floatformat:2 }}</p>
+                </div>
             </div>
-        </section>
+            <div class="card despesa">
+                <div class="card-icon">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Despesas</h3>
+                    <p>R$ {{ total_despesas|floatformat:2 }}</p>
+                </div>
+            </div>
+            <div class="card provisao-receita">
+                <div class="card-icon">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Provisão de Receitas</h3>
+                    <p>R$ {{ total_provisao_receitas|floatformat:2 }}</p>
+                </div>
+            </div>
+            <div class="card provisao-despesa">
+                <div class="card-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Provisão de Despesas</h3>
+                    <p>R$ {{ total_provisao_despesas|floatformat:2 }}</p>
+                </div>
+>>>>>>> 3e37dc2 (REQUERIMENT)
+            </div>
+        </div>
+    </section>
+</main>
+
+
+    <!-- Botão para Importar OFX -->
+
+        <!-- Botão flutuante para adicionar novas transações -->
+        <a href="javascript:void(0);" onclick="openPopup()" class=" icon-button floating-button">
+            <i class="fas fa-plus-circle"></i>
+        </a>
+
+
+
+    <!-- Estrutura do Popup -->
+        <div id="popupSelecionarGrupo" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="fecharPopup()">&times;</span>
+                <h2>Selecione o Grupo</h2>
+                <div class="dropdown-container">
+                    <select id="grupo-selecionado" class="group-dropdown">
+                        {% for grupo in grupos %}
+                            <option value="{% url 'painel_grupo' grupo_id=grupo.id %}">
+                                {{ grupo.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button onclick="irParaGrupoSelecionado()" class="btn-selecionar">Acessar</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Gerenciamento de Grupo -->
         <section class="group-management">
+<<<<<<< HEAD
             <h3>Gerenciamento de Grupo</h3>
             {% if user.grupos.exists %}
                 <!-- Exibe o botão para o Painel do Grupo -->
@@ -59,10 +143,44 @@
             <!-- Exibe as opções de criação e entrada de grupo sempre -->
             <a href="{% url 'criar_grupo' %}" class="back-painel-button">Criar Grupo</a>
             <a href="{% url 'entrar_grupo' %}" class="back-painel-button">Entrar em um Grupo</a>
+=======
+            <h3>Pro dia a dia</h3>
+
+            <div class="carousel-buttons">
+                    <a href="javascript:void(0);" onclick="openPopup()" class="margem-button icon-button">
+                        <i class="fas fa-plus-circle"></i><span>Adcionar Registro</span>
+                    </a>
+                    <a href="{% url 'importar_ofx' %}" class="icon-button">
+                        <i class="fas fa-file-import"></i> <span>Importar (OFX)</span>
+                    </a>
+
+
+                {% if user.grupos.exists %}
+                    <a onclick="abrirPopup()" class="icon-button">
+                        <i class="fas fa-users"></i>
+                        <span>Painel do Grupo</span>
+                    </a>
+                    <a href="{% url 'detalhes_grupo' grupo_id=user.grupos.first.id %}" class="icon-button">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Detalhes</span>
+                    </a>
+                {% endif %}
+                <a href="{% url 'criar_grupo' %}" class="icon-button">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Criar Grupo</span>
+                </a>
+                <a href="{% url 'entrar_grupo' %}" class="icon-button">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Entrar em um Grupo</span>
+                </a>
+            </div>
+>>>>>>> 3e37dc2 (REQUERIMENT)
         </section>
+
 
         <!-- Listagem das Próximas Transações -->
         <section class="upcoming-transactions">
+<<<<<<< HEAD
             <h3>Próximas Transações</h3>
             <div class="transactions-list">
                 <div class="next-transacoes">
@@ -79,9 +197,35 @@
             </div>
         </section>
     </main>
+=======
+    <h3>Próximas Transações</h3>
+    <div class="transactions-list">
+        <ul>
+            {% for transacao in proximas_receitas %}
+                <li class="transaction-item">
+                    <span>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</span>
+                    <div class="transaction-actions">
+                        <a href="{% url 'editar_transacao' transacao.id %}" class="edit-btn">Editar</a>
+                        <a href="{% url 'apagar_transacao' transacao.id %}" class="delete-btn">Apagar</a>
+                    </div>
+                </li>
+            {% endfor %}
+            {% for transacao in proximas_despesas %}
+                <li class="transaction-item">
+                    <span>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</span>
+                    <div class="transaction-actions">
+                        <a href="{% url 'editar_transacao' transacao.id %}" class="edit-btn">Editar</a>
+                        <a href="{% url 'apagar_transacao' transacao.id %}" class="delete-btn">Apagar</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="{% url 'extrato_completo' %}" class="see-more-button">Ver mais</a>
+</section>
 
-    <!-- Botão flutuante para adicionar novas transações -->
-    <a href="javascript:void(0);" onclick="openPopup()" class="floating-button">+</a>
+>>>>>>> 3e37dc2 (REQUERIMENT)
+
 
     <!-- Estrutura do Popup para Adicionar Transação -->
     <div id="popupForm" class="popup">
@@ -114,7 +258,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{% static 'js/script.js' %}"></script>
     <script>
         function openPopup() {
             document.getElementById("popupForm").style.display = "flex";
@@ -123,6 +266,47 @@
         function closePopup() {
             document.getElementById("popupForm").style.display = "none";
         }
+
+        // Função para abrir o popup
+        function abrirPopup() {
+            document.getElementById("popupSelecionarGrupo").style.display = "block";
+        }
+
+        // Função para fechar o popup
+        function fecharPopup() {
+            document.getElementById("popupSelecionarGrupo").style.display = "none";
+        }
+
+        // Função para redirecionar para o grupo selecionado
+        function irParaGrupoSelecionado() {
+            const selectedUrl = document.getElementById('grupo-selecionado').value;
+            if (selectedUrl) {
+                window.location.href = selectedUrl;
+            }
+        }
+
     </script>
+
+    <script>
+    // Função para abrir o popup
+    function abrirPopup() {
+        document.getElementById("popupSelecionarGrupo").style.display = "block";
+    }
+
+    // Função para fechar o popup
+    function fecharPopup() {
+        document.getElementById("popupSelecionarGrupo").style.display = "none";
+    }
+
+    // Função para redirecionar para o grupo selecionado
+    function irParaGrupoSelecionado() {
+        const selectedUrl = document.getElementById('grupo-selecionado').value;
+        if (selectedUrl) {
+            window.location.href = selectedUrl;
+        }
+    }
+
+    </script>
+
 </body>
 </html>
