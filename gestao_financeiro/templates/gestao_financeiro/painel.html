@@ -28,6 +28,7 @@
 <main class="main-panel">
     <section class="summary-carousel">
         <div class="carousel-container">
+
             <div class="card saldo">
                 <div class="card-icon">
                     <i class="fas fa-balance-scale"></i>
@@ -37,23 +38,8 @@
                     <p>R$ {{ saldo_total|floatformat:2 }}</p>
                 </div>
             </div>
+
             <div class="card receita">
-<<<<<<< HEAD
-                <h3>Receitas</h3>
-                <p>R$ {{ total_receitas|floatformat:2 }}</p>
-            </div>
-            <div class="card despesa">
-                <h3>Despesas</h3>
-                <p>R$ {{ total_despesas|floatformat:2 }}</p>
-            </div>
-            <div class="card provisao-receita">
-                <h3>Provisão de Receitas</h3>
-                <p>R$ {{ total_provisao_receitas|floatformat:2 }}</p>
-            </div>
-            <div class="card provisao-despesa">
-                <h3>Provisão de Despesas</h3>
-                <p>R$ {{ total_provisao_despesas|floatformat:2 }}</p>
-=======
                 <div class="card-icon">
                     <i class="fas fa-arrow-up"></i>
                 </div>
@@ -62,6 +48,7 @@
                     <p>R$ {{ total_receitas|floatformat:2 }}</p>
                 </div>
             </div>
+
             <div class="card despesa">
                 <div class="card-icon">
                     <i class="fas fa-arrow-down"></i>
@@ -71,7 +58,8 @@
                     <p>R$ {{ total_despesas|floatformat:2 }}</p>
                 </div>
             </div>
-            <div class="card provisao-receita">
+
+           <div class="card provisao-receita">
                 <div class="card-icon">
                     <i class="fas fa-piggy-bank"></i>
                 </div>
@@ -80,6 +68,7 @@
                     <p>R$ {{ total_provisao_receitas|floatformat:2 }}</p>
                 </div>
             </div>
+
             <div class="card provisao-despesa">
                 <div class="card-icon">
                     <i class="fas fa-wallet"></i>
@@ -88,14 +77,10 @@
                     <h3>Provisão de Despesas</h3>
                     <p>R$ {{ total_provisao_despesas|floatformat:2 }}</p>
                 </div>
->>>>>>> 3e37dc2 (REQUERIMENT)
             </div>
         </div>
     </section>
 </main>
-
-
-    <!-- Botão para Importar OFX -->
 
         <!-- Botão flutuante para adicionar novas transações -->
         <a href="javascript:void(0);" onclick="openPopup()" class=" icon-button floating-button">
@@ -125,25 +110,7 @@
 
         <!-- Gerenciamento de Grupo -->
         <section class="group-management">
-<<<<<<< HEAD
-            <h3>Gerenciamento de Grupo</h3>
-            {% if user.grupos.exists %}
-                <!-- Exibe o botão para o Painel do Grupo -->
-                <a href="{% url 'painel_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Painel do Grupo</a>
 
-                <!-- Exibe o botão para os Detalhes do Grupo -->
-                <a href="{% url 'detalhes_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Detalhes</a>
-            {% endif %}
-
-            <!-- Verifica se o usuário já faz parte de algum grupo para exibir o link do painel do grupo -->
-            {% if user.grupos.exists %}
-                <a href="{% url 'painel_grupo' grupo_id=user.grupos.first.id %}" class="back-painel-button">Painel do Grupo</a>
-            {% endif %}
-
-            <!-- Exibe as opções de criação e entrada de grupo sempre -->
-            <a href="{% url 'criar_grupo' %}" class="back-painel-button">Criar Grupo</a>
-            <a href="{% url 'entrar_grupo' %}" class="back-painel-button">Entrar em um Grupo</a>
-=======
             <h3>Pro dia a dia</h3>
 
             <div class="carousel-buttons">
@@ -174,14 +141,11 @@
                     <span>Entrar em um Grupo</span>
                 </a>
             </div>
->>>>>>> 3e37dc2 (REQUERIMENT)
         </section>
-
 
         <!-- Listagem das Próximas Transações -->
         <section class="upcoming-transactions">
-<<<<<<< HEAD
-            <h3>Próximas Transações</h3>
+            <h3>Registros Recentes</h3>
             <div class="transactions-list">
                 <div class="next-transacoes">
                     <ul>
@@ -197,35 +161,6 @@
             </div>
         </section>
     </main>
-=======
-    <h3>Próximas Transações</h3>
-    <div class="transactions-list">
-        <ul>
-            {% for transacao in proximas_receitas %}
-                <li class="transaction-item">
-                    <span>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</span>
-                    <div class="transaction-actions">
-                        <a href="{% url 'editar_transacao' transacao.id %}" class="edit-btn">Editar</a>
-                        <a href="{% url 'apagar_transacao' transacao.id %}" class="delete-btn">Apagar</a>
-                    </div>
-                </li>
-            {% endfor %}
-            {% for transacao in proximas_despesas %}
-                <li class="transaction-item">
-                    <span>{{ transacao.descricao }} - R$ {{ transacao.valor|floatformat:2 }} - {{ transacao.data }}</span>
-                    <div class="transaction-actions">
-                        <a href="{% url 'editar_transacao' transacao.id %}" class="edit-btn">Editar</a>
-                        <a href="{% url 'apagar_transacao' transacao.id %}" class="delete-btn">Apagar</a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <a href="{% url 'extrato_completo' %}" class="see-more-button">Ver mais</a>
-</section>
-
->>>>>>> 3e37dc2 (REQUERIMENT)
-
 
     <!-- Estrutura do Popup para Adicionar Transação -->
     <div id="popupForm" class="popup">

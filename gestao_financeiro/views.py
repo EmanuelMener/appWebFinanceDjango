@@ -9,11 +9,7 @@ from django.core.files.storage import default_storage
 from ofxparse import OfxParser
 import decimal
 from decimal import Decimal  # já importado corretamente
-<<<<<<< HEAD
 
-=======
-from django.http import JsonResponse
->>>>>>> 3e37dc2 (REQUERIMENT)
 
 
 # Paleta de cores para a foto do usuário com iniciais
@@ -56,19 +52,19 @@ def painel(request):
 
     return render(request, 'gestao_financeiro/painel.html', contexto)
 
-<<<<<<< HEAD
+
 # View para exibir o painel do grupo
 @login_required
 def painel_grupo(request, grupo_id):
     grupo = get_object_or_404(Grupo, id=grupo_id)
-=======
+
 
 # View para exibir o painel do grupo
 @login_required
 def painel_grupo(request, grupo_id):
 
     grupo = get_object_or_404(Grupo, id=grupo_id, membros=request.user)
->>>>>>> 3e37dc2 (REQUERIMENT)
+
 
     # Verifica se o usuário é membro do grupo
     if request.user not in grupo.membros.all():
@@ -77,11 +73,11 @@ def painel_grupo(request, grupo_id):
     # Calcula as somas das transações para todos os membros do grupo
     total_receitas_grupo = grupo.transacoes.filter(tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas_grupo = grupo.transacoes.filter(tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-<<<<<<< HEAD
+
     saldo_grupo = total_receitas_grupo - total_despesas_grupo
-=======
+
     saldo_grupo = total_receitas_grupo -- total_despesas_grupo
->>>>>>> 3e37dc2 (REQUERIMENT)
+
 
     # Transações recentes do grupo
     transacoes_grupo = grupo.transacoes.order_by('-data')[:5]
