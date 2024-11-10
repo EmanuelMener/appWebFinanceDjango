@@ -1,12 +1,28 @@
 {% extends 'gestao_financeiro/base.html' %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Criar Conta</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
-    </form>
-</div>
+    <div class="form-container">
+        <h2>Criar Conta</h2>
+            <form id="registration-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Usuário:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+
+                        <input type="password" id="password" name="password" required>
+
+                        <p class="password-strength"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirmar Senha:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit">Cadastrar</button>
+
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            </form>
+    </div>
 {% endblock %}

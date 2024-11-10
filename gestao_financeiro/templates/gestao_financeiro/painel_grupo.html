@@ -6,37 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Grupo</title>
     <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <!-- Painel de Resumo do Grupo -->
-<header class="homebar">
-    <div class="user-info">
-        <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
-        <div class="user-details">
-            <span class="username">Grupo: {{ grupo.nome }}</span>
-            <span class="datetime">{{ current_datetime }}</span>
+<header class="homebar-grupo">
+    <div class="homebar-espaco">
+        <a href="{% url 'painel' %}" class=" back-painel-button">
+            <i class="fas fa-chevron-left"></i>
+            Painel
+        </a>
+        <div class="user-info">
+            <div class="user-photo" style="background-color: {{ cor_aleatoria }}">{{ iniciais }}</div>
+            <div class="user-details">
+                <span class="username">Grupo: {{ grupo.nome }}</span>
+                <span class="datetime">{{ current_datetime }}</span>
+            </div>
         </div>
     </div>
+
 </header>
 
 <main class="main-panel">
 
-    <section class="summary">
-        <div class="card receita">
-            <h3>Total Receitas do Grupo</h3>
-            <p>R$ {{ total_receitas_grupo|floatformat:2 }}</p>
-        </div>
-        <div class="card despesa">
-            <h3>Total Despesas do Grupo</h3>
-            <p>R$ {{ total_despesas_grupo|floatformat:2 }}</p>
-        </div>
-        <div class="card saldo">
-            <h3>Saldo do Grupo</h3>
-            <p>R$ {{ saldo_grupo|floatformat:2 }}</p>
+    <section class="summary-carousel">
+        <div class="carousel-container">
+            <div class="card saldo">
+                <div class="card-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Saldo do Grupo</h3>
+                    <p>R$ {{ saldo_grupo|floatformat:2 }}</p>
+                </div>
+            </div>
+
+            <div class="card receita">
+                <div class="card-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Total Receitas do Grupo</h3>
+                    <p>R$ {{ total_receitas_grupo|floatformat:2 }}</p>
+                </div>
+            </div>
+
+            <div class="card despesa">
+            <div class="card-icon">
+                <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Total Despesas do Grupo</h3>
+                    <p>R$ {{ total_despesas_grupo|floatformat:2 }}</p>
+                </div>
+            </div>
         </div>
     </section>
-    <a href="{% url 'painel' %}" class="back-painel-button">Painel</a>
+
+
 
     <section class="group-members">
         <h3>Membros do Grupo</h3>
@@ -58,6 +90,8 @@
         </ul>
     </section>
 </main>
+
+
 
 <!-- Botão flutuante para abrir o popup -->
 <a href="javascript:void(0);" class="floating-button" onclick="openPopup()">+</a>

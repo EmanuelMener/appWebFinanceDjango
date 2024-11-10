@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('financeiro/', include('gestao_financeiro.urls')),  # Inclui as URLs do app financeiro
+    path('appfinanceiro/', include('gestao_financeiro.urls')),  # Inclui as URLs do app financeiro
     path('login/', auth_views.LoginView.as_view(template_name='gestao_financeiro/login.html'), name='login'),  # Login customizado
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),  # Logout redirecionando para login
 ]

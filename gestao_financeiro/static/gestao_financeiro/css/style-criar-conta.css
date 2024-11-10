@@ -13,6 +13,7 @@ body, html {
     font-family: 'Poppins';
     font-weight: normal;
     font-style: normal;
+    text-align: left;
 
 }
 
@@ -30,14 +31,7 @@ body, html {
 
     z-index: 10;
 }
-.fundo {
 
-  background: linear-gradient(to right, orange, purple);
-  filter: blur(5px);
-  height: 100vh; /* Ajuste a altura conforme necessário */
-    width: 100vw;
-        position: absolute;
-}
 
 h2 {
     color: #8A05BE;

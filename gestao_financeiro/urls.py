@@ -5,11 +5,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('financeiro/', views.painel, name='painel'),
-    path('financeiro/adicionar/', views.adicionar_transacao, name='adicionar_transacao'),
-    path('financeiro/grupo/criar/', views.criar_grupo, name='criar_grupo'),
-    path('financeiro/grupo/entrar/', views.entrar_grupo, name='entrar_grupo'),
-    path('financeiro/grupo/<int:grupo_id>/', views.painel_grupo, name='painel_grupo'),
+    path('', views.painel, name='painel'),
+    path('adicionar/', views.adicionar_transacao, name='adicionar_transacao'),
+    path('criar/', views.criar_grupo, name='criar_grupo'),
+    path('entrar/', views.entrar_grupo, name='entrar_grupo'),
+    path('<int:grupo_id>/', views.painel_grupo, name='painel_grupo'),
     path('extrato/', views.extrato_completo, name='extrato_completo'),  # Nova URL para o extrato completo
 
     # Autenticação
@@ -18,10 +18,10 @@ urlpatterns = [
 
     path("importar_ofx/", views.importar_ofx, name="importar_ofx"),
 
-    path('grupo/<int:grupo_id>/', views.detalhes_grupo, name='detalhes_grupo'),
+    path('<int:grupo_id>/', views.detalhes_grupo, name='detalhes_grupo'),
 
-    path('transacao/editar/<int:transacao_id>/', views.editar_transacao, name='editar_transacao'),
-    path('transacao/apagar/<int:transacao_id>/', views.apagar_transacao, name='apagar_transacao'),
+    path('<int:transacao_id>/', views.editar_transacao, name='editar_transacao'),
+    path('<int:transacao_id>/', views.apagar_transacao, name='apagar_transacao'),
 
     path('criar_conta/', views.criar_conta, name='criar_conta'),
 

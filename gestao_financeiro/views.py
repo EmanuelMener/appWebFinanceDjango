@@ -33,19 +33,28 @@ def painel(request):
     # Calculando os totais de receitas e despesas
     total_receitas = Transacao.objects.filter(user=usuario, tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas = Transacao.objects.filter(user=usuario, tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+    total_provisao_receitas = Transacao.objects.filter(user=usuario, tipo='provisao_receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+    total_provisao_despesas = Transacao.objects.filter(user=usuario, tipo='provisao_despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
+
     saldo_total = total_receitas - total_despesas
 
     # Pegando as próximas 5 receitas e despesas para o usuário logado
     proximas_receitas = Transacao.objects.filter(user=usuario, tipo='receita').order_by('data')[:5]
     proximas_despesas = Transacao.objects.filter(user=usuario, tipo='despesa').order_by('data')[:5]
+    proximas_provisoes_receitas = Transacao.objects.filter(user=usuario, tipo='provisao_receita').order_by('data')[:5]
+    proximas_provisoes_despesas = Transacao.objects.filter(user=usuario, tipo='provisao_despesa').order_by('data')[:5]
 
     contexto = {
         'user': usuario,
         'total_receitas': total_receitas,
         'total_despesas': total_despesas,
+        'provisao_receita': total_provisao_receitas,
+        'provisao_despesa': total_provisao_despesas,
         'saldo_total': saldo_total,
         'proximas_receitas': proximas_receitas,
         'proximas_despesas': proximas_despesas,
+        'proximas_prov_receitas': proximas_provisoes_receitas,
+        'proximas_prov_despesas': proximas_provisoes_despesas,
         'current_datetime': timezone.now(),
         'grupos': grupos,
 
@@ -54,13 +63,6 @@ def painel(request):
     }
 
     return render(request, 'gestao_financeiro/painel.html', contexto)
-
-
-# View para exibir o painel do grupo
-@login_required
-def painel_grupo(request, grupo_id):
-    grupo = get_object_or_404(Grupo, id=grupo_id)
-
 
 # View para exibir o painel do grupo
 @login_required
@@ -76,8 +78,6 @@ def painel_grupo(request, grupo_id):
     # Calcula as somas das transações para todos os membros do grupo
     total_receitas_grupo = grupo.transacoes.filter(tipo='receita').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
     total_despesas_grupo = grupo.transacoes.filter(tipo='despesa').aggregate(Sum('valor'))['valor__sum'] or Decimal('0.00')
-
-    saldo_grupo = total_receitas_grupo - total_despesas_grupo
 
     saldo_grupo = total_receitas_grupo -- total_despesas_grupo
 
@@ -117,14 +117,10 @@ def adicionar_transacao(request):
         )
         transacao.save()
 
-        # Redireciona com grupo_id se o usuário pertence a um grupo
-        if grupo:
-            return redirect('painel_grupo', grupo_id=grupo.id)
-        else:
-            return redirect('painel')
+
+        return redirect('painel')
 
     return render(request, 'gestao_financeiro/painel.html')
-
 
 @login_required
 def editar_transacao(request, transacao_id):

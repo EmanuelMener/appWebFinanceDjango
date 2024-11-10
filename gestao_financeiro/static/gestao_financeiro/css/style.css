@@ -2,10 +2,14 @@
 body {
     background-color: #1e1e2f; /* Fundo escuro */
     color: #e1e1f1; /* Texto claro */
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins';
+    font-weight: normal;
+    font-style: normal;
     margin: 0;
     padding: 0;
 }
+
+
 /* Homebar com altura máxima e alinhamento horizontal */
 .homebar {
     background-color: #8a05be; /* Fundo roxo Nubank */
@@ -16,12 +20,34 @@ body {
     justify-content: center;
     max-height: 20px; /* Limita a altura da homebar */
     overflow: hidden;
-
-    background-image: url("/static/gestao_financeiro/img/logo.svg");
-    background-size: auto; /* Ajusta o tamanho da imagem */
-    background-position: -100px; /* Alinha a imagem mais para a direita */
-
 }
+
+.homebar-grupo {
+    background-color: #8a05be; /* Fundo roxo Nubank */
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 20px; /* Limita a altura da homebar */
+    overflow: hidden;
+}
+
+.homebar-espaco{
+    width: 85vw;
+    background-color: #8a05be; /* Fundo roxo Nubank */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.back-painel-button {
+    text-decoration: none;
+    color: #aaa;
+}
+
+
 
 /* Estilos para o fundo do modal */
 .modal {
@@ -250,6 +276,11 @@ body {
     display: flex;
     gap: 20px;
     overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+.carousel-container::-webkit-scrollbar {
+  border-radius: 10px;
 }
 
 /* Estilo dos cartões de resumo */
@@ -310,15 +341,18 @@ body {
 
 /* Estilo das transações recentes */
 .upcoming-transactions {
+    margin: 0 auto;
     margin-top: 30px;
-    padding: 20px;
+    padding: 20px 0;
+    width: 92vw;
+
 }
 
 .upcoming-transactions h3 {
     font-size: 20px;
     color: #cba6f7;
     margin-bottom: 15px;
-    text-align: center;
+    text-align: left;
 }
 
 /* Estilos básicos dos lançamentos */
@@ -381,6 +415,10 @@ li:hover .transaction-actions {
     color: white;
 }
 
+.transactions-list{
+    width: 92vw;
+    margin: 0 auto;
+}
 
 .transactions-list ul {
     list-style-type: none;
@@ -405,7 +443,8 @@ li:hover .transaction-actions {
 }
 
 .floating-button:hover {
-    background-color: #4b006e;
+    background-color: #194521;
+    border-radius: 50%;
 }
 
 /* Botão flutuante para adicionar transações */
@@ -414,7 +453,7 @@ li:hover .transaction-actions {
     bottom: 120px;
     right: 10px;
 }
-.floating-button2 i:hover {
+.floating-button2:hover {
     background-color: #4b006e;
 }
 
@@ -496,6 +535,11 @@ li:hover .transaction-actions {
 }
 
 /* Lista de membros do grupo */
+.group-members{
+    width: 92vw;
+    margin: 0 auto;
+}
+
 .group-members h3 {
     color: #cba6f7;
     font-size: 20px;
@@ -569,7 +613,7 @@ li:hover .transaction-actions {
     background-color: #8a05be;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 12px;
     text-align: center;
     max-width: 200px;
 }
@@ -578,46 +622,57 @@ li:hover .transaction-actions {
     background-color: #4b006e;
 }
 
-.back-painel-button {
-    padding: 10px 10px;
-    background-color: #8a05be;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-    max-width: 100px;
-    font-size: 20px;
-}
-
-.back-painel-button:hover {
-    background-color: #4b006e;
-}
-
 .summary-carousel {
-    flex-wrap: wrap;
-    gap: 100px;
-
-    padding: 10px 20px;
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    margin: 0 auto;
+    width: 92vw;
+    scroll-snap-type: x mandatory;
 }
 
 .group-management {
-    margin: 20px 0;
-    padding-left: 50px;
+    text-align: left;
+    margin: 0 auto;
+    width: 100%;
 }
+
+.group-management h3 {
+    padding-left: 30px;
+}
+
 
 .carousel-buttons {
     display: flex;
     overflow-x: auto;
     gap: 15px;
-    padding: 10px 0;
+    margin: 0 auto;
+    padding-left: 30px;
     scroll-snap-type: x mandatory;
-
 }
+
+.carousel-buttons::-webkit-scrollbar {
+  border-radius: 10px;
+}
+
 
 
 .icon-button i {
     font-size: 24px; /* Tamanho do ícone */
     background-color: #8a05be; /* Cor do círculo */
+    color: white;
+    border-radius: 50%;
+    width: 50px; /* Largura do botão circular */
+    height: 50px; /* Altura do botão circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px; /* Espaço entre o ícone e o texto */
+}
+
+.icon-button2 i {
+    font-size: 24px; /* Tamanho do ícone */
+    background-color: #28a745; /* Cor do círculo */
     color: white;
     border-radius: 50%;
     width: 50px; /* Largura do botão circular */
@@ -648,38 +703,18 @@ li:hover .transaction-actions {
 /* Contêiner dos cards */
 .carousel-container {
     display: flex;
+    overflow-x: auto;
     gap: 15px;
-    justify-content: space-around;
-    flex-wrap: wrap; /* Permite quebra de linha quando necessário */
-    padding: 10px;
+    margin: 0 auto;
+    width: 92vw;
+    scroll-snap-type: x mandatory;
 }
 
-/* Estilos para telas grandes */
-@media (min-width: 768px) {
-    .carousel-container {
-        flex-direction: row; /* Cards lado a lado */
-    }
-    .card {
-        width: 23%; /* Cada card ocupa cerca de 1/4 do espaço em telas grandes */
-        max-width: 250px; /* Limite máximo opcional para manter um bom layout */
-    }
-}
+
 
 /* Estilos específicos para mobile */
 @media (max-width: 767px) {
-    .carousel-container {
-        flex-direction: column; /* Empilha os cards */
-        align-items: center; /* Centraliza os cards */
-        padding: 0; /* Adiciona um pouco de espaço nas laterais */
-    }
-    .card {
-        width: 100%; /* Largura completa para os cards no mobile */
-        max-width: 1000px; /* Limite opcional para centralizar ainda melhor */
-        /*margin-bottom: 15px;  Espaço entre os cards */
-        /* Aumenta o padding para tornar o card mais espaçoso */
-        box-sizing: border-box; /* Garante que o padding não ultrapasse o width */
-    }
-}
+
 
 
 /* Ajustes para dispositivos móveis */
@@ -723,24 +758,9 @@ li:hover .transaction-actions {
         text-align: center;
     }
 
-    /* Seção de pro dia a dia*/
-    .group-management {
-        text-align: center; /* Centraliza o texto e os botões */
-        margin: 20px 0;
-        padding-left: 20px;
-    }
-
-    .back-painel-button {
-        display: inline-block;
-        margin: 5px auto; /* Espaçamento vertical e centralização */
-        padding: 10px 15px;
-        text-align: center;
-        max-width: 150px; /* Limite de largura para centralização */
-    }
-
     /* Centralizar Próximas Transações */
     .upcoming-transactions {
-        text-align: center;
+        text-align: left;
         margin-top: 30px;
     }
 
@@ -752,19 +772,6 @@ li:hover .transaction-actions {
 }
 
 @media (max-width: 767px) {
-    .carousel-buttons {
-        display: flex;
-        overflow-x: auto;
-        margin-left: 20px;
-        gap: 15px;
-        padding: 10px 0;
-        padding-left: 40px;
-        scroll-snap-type: x mandatory;
-        justify-content: center;
-    }
-
-
-
     .icon-button {
         display: flex;
         flex-direction: column;
@@ -794,5 +801,5 @@ li:hover .transaction-actions {
         max-width: 70px;
     }
 }
-
+}
 
