@@ -23,4 +23,6 @@ urlpatterns = [
     path('transacao/editar/<int:transacao_id>/', views.editar_transacao, name='editar_transacao'),
     path('transacao/apagar/<int:transacao_id>/', views.apagar_transacao, name='apagar_transacao'),
 
+    path('criar_conta/', views.criar_conta, name='criar_conta'),
+
 ]

@@ -18,7 +18,9 @@
             <label for="password">Senha:</label>
             <input type="password" id="password" name="password" required>
 
-            <button type="submit">Entrar</button>
+            <!-- Botões para Login e Criar Conta -->
+            <button type="submit" class="btn btn-secondary">Entrar</button>
+            <a href="{% url 'criar_conta' %}" class="btn btn-primary">Criar Conta</a> <!-- Botão de criação de conta -->
         </form>
     </div>
 </body>

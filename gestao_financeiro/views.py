@@ -9,6 +9,9 @@ from django.core.files.storage import default_storage
 from ofxparse import OfxParser
 import decimal
 from decimal import Decimal  # já importado corretamente
+from django.contrib.auth.forms import UserCreationForm  # Importa o formulário de criação de usuário padrão do Django
+from django.contrib.auth import login
+from django.contrib import messages
 
 
 
@@ -235,3 +238,16 @@ def importar_ofx(request):
 
     return render(request, 'gestao_financeiro/importar_ofx.html')
 
+
+def criar_conta(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Login automático após cadastro
+            messages.success(request, "Conta criada com sucesso!")
+            return redirect('painel')  # Redireciona para o painel após cadastro
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'gestao_financeiro/criar_conta.html', {'form': form})

@@ -1,0 +1,12 @@
+{% extends 'gestao_financeiro/base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Criar Conta</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+</div>
+{% endblock %}
