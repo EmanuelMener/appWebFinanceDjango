@@ -563,26 +563,36 @@ li:hover .transaction-actions {
 
 
 /* Estilo da Tabela de Extrato Completo */
+
+
+.container{
+    margin: 0 auto;
+    width: 80vw;
+}
+
 .extrato-table {
-    width: 80%; /* Largura da tabela */
+    max-width: 80vw; /* Largura da tabela */
     margin: 20px auto; /* Centraliza a tabela horizontalmente */
     border-collapse: collapse; /* Remove espaços entre as bordas */
     font-size: 14px;
     color: #e1e1f1; /* Cor do texto */
     text-align: center;
+    margin: 0 auto;
+
 }
+
 
 /* Cabeçalho da tabela */
 .extrato-table thead th {
     background-color: #8a05be; /* Fundo roxo */
     color: #fff; /* Texto branco */
-    padding: 10px;
     border: 1px solid #e1e1f1; /* Cor da borda igual à cor do texto */
+
 }
 
 /* Células da tabela com bordas */
 .extrato-table th, .extrato-table td {
-    padding: 10px;
+    padding: 2px;
     border: 1px solid #e1e1f1; /* Cor da borda igual à cor do texto */
 }
 
@@ -597,12 +607,11 @@ li:hover .transaction-actions {
 
 /* Estilo do título da data de cada grupo */
 .extrato-dia {
-    background-color: #8a05be;
-    color: #fff;
-    font-weight: bold;
     text-align: left;
-    padding-left: 10px;
-    border: 1px solid #e1e1f1;
+}
+
+.pagination{
+    width: 80vw;
 }
 
 /* Botão Ver Mais */
@@ -757,6 +766,8 @@ li:hover .transaction-actions {
         max-width: 200px; /* Define largura máxima para centralização */
         text-align: center;
     }
+
+
 
     /* Centralizar Próximas Transações */
     .upcoming-transactions {

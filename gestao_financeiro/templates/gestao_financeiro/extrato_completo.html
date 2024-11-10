@@ -6,15 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extrato Completo</title>
     <link rel="stylesheet" href="{% static 'gestao_financeiro/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center;">Extrato Completo <a href="{% url 'painel' %}" class="back-painel-button">Painel</a></h1>
+        <h1 style="text-align: center;">Extrato Completo
+        <a href="{% url 'painel' %}" class=" back-painel-button">
+            <i class="fas fa-chevron-left"></i>
+            Painel
+        </a>
+        </h1>
 
         <table class="extrato-table">
             <thead>
                 <tr>
-                    <th>Descrição das Movimentações</th>
+                    <th>Descrição</th>
                     <th>Valor</th>
                     <th>Saldo</th>
                     <th>Tipo</th>
